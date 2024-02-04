@@ -3,6 +3,7 @@
 namespace AcMarche\PivotSearch\Data;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RemoteData
@@ -30,7 +31,11 @@ class RemoteData
             $this->url
         );
 
-        return json_decode($response->getContent(), flags: JSON_THROW_ON_ERROR);
+        if ($response->getStatusCode() == Response::HTTP_OK) {
+            return json_decode($response->getContent(), flags: JSON_THROW_ON_ERROR);
+        }
+
+        throw new \Exception($response->getContent(), $response->getStatusCode());
     }
 
 }

@@ -67,6 +67,7 @@ class MeiliServer
     private function treatment(): array
     {
         $remoteData = $this->remoteData->getAllData();
+
         if (isset($remoteData->error)) {
             throw new \Exception('Erreur sync tourisme', $remoteData->error);
         }
