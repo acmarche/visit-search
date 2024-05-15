@@ -4,8 +4,10 @@ namespace AcMarche\PivotSearch\Search;
 
 use Meilisearch\Contracts\DeleteTasksQuery;
 use Meilisearch\Endpoints\Keys;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use VisitMarche\ThemeTail\Lib\Elasticsearch\Data\DocumentElastic;
 use VisitMarche\ThemeTail\Lib\Elasticsearch\Data\ElasticData;
 
 class MeiliServer
@@ -49,16 +51,19 @@ class MeiliServer
      * @throws \Exception
      * @throws TransportExceptionInterface
      */
-    public function addContent(): void
+    public function addContent(SymfonyStyle $style): void
     {
         $documents = $this->getAllData();
+        foreach ($documents as $document) {
+            $style->writeln($document->name);
+        }
         $this->init();
         $index = $this->client->index($this->indexName);
         $index->addDocuments($documents, $this->primaryKey);
     }
 
     /**
-     * @return array
+     * @return DocumentElastic[]
      * @throws \Exception
      * @throws TransportExceptionInterface
      */

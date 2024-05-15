@@ -68,7 +68,7 @@ class MeiliServerCommand extends Command
         if ($update) {
             require_once($this->projectDir.'/wp-load.php');
             try {
-                $this->meiliServer->addContent();
+                $this->meiliServer->addContent($this->io);
             } catch (\Exception|TransportExceptionInterface $e) {
                 $this->io->error($e->getMessage());
             }
