@@ -10,11 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use \WpOrg\Requests\Requests;
-
-//$_SERVER['HTTP_HOST'] = 'www.visitmarche.be';
-require_once __DIR__.'/../../../../../wp-load.php';
 
 #[AsCommand(
     name: 'pivot:meili-server',
@@ -25,6 +22,8 @@ class MeiliServerCommand extends Command
     private SymfonyStyle $io;
 
     public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        private string $projectDir,
         private MeiliServer $meiliServer,
     ) {
         parent::__construct();
@@ -67,6 +66,7 @@ class MeiliServerCommand extends Command
         }
 
         if ($update) {
+            require_once($this->projectDir.'/wp-load.php');
             try {
                 $this->meiliServer->addContent();
             } catch (\Exception|TransportExceptionInterface $e) {
