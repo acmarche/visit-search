@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use \WpOrg\Requests\Requests;
 
 //$_SERVER['HTTP_HOST'] = 'www.visitmarche.be';
 require_once __DIR__.'/../../../../../wp-load.php';
