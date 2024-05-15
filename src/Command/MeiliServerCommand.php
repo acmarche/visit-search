@@ -83,6 +83,8 @@ class MeiliServerCommand extends Command
         $tasks = $this->meiliServer->client->getTasks();
         $data = [];
         foreach ($tasks->getResults() as $result) {
+            dump($result);
+            continue;
             $t = [$result['uid'], $result['status'], $result['type'], $result['startedAt']];
             $t['error'] = null;
             $t['url'] = null;
