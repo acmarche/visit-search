@@ -27,6 +27,7 @@ class SearchMeili
     public function searchGeo(float $latitude, float $longitude, int $distance = 20000): SearchResult
     {
         $this->init();
+
         return $this->client
             ->index($this->indexName)
             ->search('', [
@@ -45,12 +46,41 @@ class SearchMeili
         $this->init();
         $index = $this->client->index($this->indexName);
         $filters = ['filter' => ['type = fiche']];
-        $filters=[];
+        $filters = [];
         if ($id) {
             $filters['filter'] = ['id = '.$id];
         }
 
         return $index->search($keyword, $filters);
+    }
+
+    public function searchRecommandations(\WP_Query $wp_query): array
+    {
+        $queries = $wp_query->query;
+        $queryString = implode(' ', $queries);
+        $queryString = preg_replace('#-#', ' ', $queryString);
+        $queryString = preg_replace('#/#', ' ', $queryString);
+        $queryString = strip_tags($queryString);
+        if ('' !== $queryString) {
+            try {
+                $results = $this->search($queryString);
+                $hits = json_decode($results, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\Exception $e) {
+                return [];
+            }
+
+            return array_map(
+                function ($hit) {
+                    $hit->title = $hit->name;
+                    $hit->tags = [];
+
+                    return $hit;
+                },
+                $hits
+            );
+        }
+
+        return [];
     }
 
 }
