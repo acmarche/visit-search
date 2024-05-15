@@ -67,13 +67,18 @@ class MeiliServer
     private function getAllData(): array
     {
         $elasticData = new ElasticData();
+        $documents = [];
+        foreach ($elasticData->getPosts() as $document) {
+            $documents[] = $document;
+        }
+        foreach ($elasticData->getCategories() as $document) {
+            $documents[] = $document;
+        }
+        foreach ($elasticData->getOffres() as $document) {
+            $documents[] = $document;
+        }
 
-        return array_merge(
-            $elasticData->getPosts(),
-            $elasticData->getCategories(),
-            $elasticData->getOffres()
-        );
-
+        return $documents;
     }
 
     public function createKey(): Keys
