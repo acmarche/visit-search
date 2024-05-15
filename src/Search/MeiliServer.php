@@ -54,9 +54,6 @@ class MeiliServer
     public function addContent(SymfonyStyle $style): void
     {
         $documents = $this->getAllData();
-        foreach ($documents as $document) {
-            $style->writeln($document->name);
-        }
         $this->init();
         $index = $this->client->index($this->indexName);
         $index->addDocuments($documents, $this->primaryKey);

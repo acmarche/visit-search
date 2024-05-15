@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\String\UnicodeString;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[AsCommand(
@@ -83,14 +84,13 @@ class MeiliServerCommand extends Command
         $tasks = $this->meiliServer->client->getTasks();
         $data = [];
         foreach ($tasks->getResults() as $result) {
-            dump($result);
-            continue;
             $t = [$result['uid'], $result['status'], $result['type'], $result['startedAt']];
             $t['error'] = null;
             $t['url'] = null;
             if ($result['status'] == 'failed') {
                 if (isset($result['error'])) {
-                    $t['error'] = $result['error']['message'];
+                    $message = (new UnicodeString($result['error']['message']))->truncate(50);
+                    $t['error'] = $result['error']['code'].' '.$message->toString();
                     $t['link'] = $result['error']['link'];
                 }
             }
