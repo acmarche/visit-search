@@ -2,12 +2,11 @@
 
 namespace AcMarche\PivotSearch\Search;
 
-use AcMarche\PivotSearch\Data\DocumentElastic;
-use AcMarche\PivotSearch\Data\RemoteData;
 use Meilisearch\Contracts\DeleteTasksQuery;
 use Meilisearch\Endpoints\Keys;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use VisitMarche\ThemeTail\Lib\Elasticsearch\Data\ElasticData;
 
 class MeiliServer
 {
@@ -20,7 +19,6 @@ class MeiliServer
         private string $indexName,
         #[Autowire(env: 'MEILI_PIVOT_MASTER_KEY')]
         private string $masterKey,
-        private readonly RemoteData $remoteData
     ) {
     }
 
@@ -53,7 +51,7 @@ class MeiliServer
      */
     public function addContent(): void
     {
-        $documents = $this->treatment();
+        $documents = $this->getAllData();
         $this->init();
         $index = $this->client->index($this->indexName);
         $index->addDocuments($documents, $this->primaryKey);
@@ -64,48 +62,16 @@ class MeiliServer
      * @throws \Exception
      * @throws TransportExceptionInterface
      */
-    private function treatment(): array
+    private function getAllData(): array
     {
-        $remoteData = $this->remoteData->getAllData();
+        $elasticData = new ElasticData();
 
-        if (isset($remoteData->error)) {
-            throw new \Exception('Erreur sync tourisme', $remoteData->error);
-        }
+        return array_merge(
+            $elasticData->getPosts(),
+            $elasticData->getCategories(),
+            $elasticData->getOffres()
+        );
 
-        $documents = [];
-        foreach ($remoteData->posts as $data) {
-            $documents[] = $this->createDocumentElasticFromX($data, 'post');
-        }
-
-        foreach ($remoteData->categories as $data) {
-            $documents[] = $this->createDocumentElasticFromX($data, 'category');
-        }
-
-        foreach ($remoteData->offres as $data) {
-            $documents[] = $this->createDocumentElasticFromX($data, 'offer');
-        }
-
-        return $documents;
-    }
-
-    private function createDocumentElasticFromX(\stdClass $object, string $type): DocumentElastic
-    {
-        $document = new DocumentElastic();
-        $document->id = $this->createId($object->id, $type);
-        $document->name = $object->name;
-        $document->excerpt = $object->excerpt;
-        $document->content = $object->content;
-        $document->tags = $object->tags;
-        $document->date = $object->date;
-        $document->url = $object->url;
-        $document->image = $object->image;
-
-        return $document;
-    }
-
-    private function createId(int|string $postId, string $type): string
-    {
-        return $type.'_'.$postId;
     }
 
     public function createKey(): Keys
