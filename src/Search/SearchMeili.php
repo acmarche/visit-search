@@ -69,8 +69,8 @@ class SearchMeili
 
             return array_map(
                 function ($hit) {
-                    $hit->title = $hit->name;
-                    $hit->tags = [];
+                    $hit['title'] = $hit['name'];
+                    $hit['tags'] = [];
 
                     return $hit;
                 },
