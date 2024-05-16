@@ -3,6 +3,7 @@
 namespace AcMarche\PivotSearch\Search;
 
 use AcMarche\PivotSearch\Data\DocumentElastic;
+use AcMarche\PivotSearch\Data\ElasticData;
 use Meilisearch\Contracts\DeleteTasksQuery;
 use Meilisearch\Endpoints\Keys;
 use Symfony\Component\Console\Style\SymfonyStyle;
