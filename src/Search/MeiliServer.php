@@ -2,13 +2,12 @@
 
 namespace AcMarche\PivotSearch\Search;
 
+use AcMarche\PivotSearch\Data\DocumentElastic;
 use Meilisearch\Contracts\DeleteTasksQuery;
 use Meilisearch\Endpoints\Keys;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use VisitMarche\ThemeTail\Lib\Elasticsearch\Data\DocumentElastic;
-use VisitMarche\ThemeTail\Lib\Elasticsearch\Data\ElasticData;
 
 class MeiliServer
 {
