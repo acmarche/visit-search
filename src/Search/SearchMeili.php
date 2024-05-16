@@ -62,7 +62,7 @@ class SearchMeili
         if ('' !== $queryString) {
             try {
                 $results = $this->search($queryString);
-                $hits = json_decode($results, null, 512, JSON_THROW_ON_ERROR);
+                $hits = $results->getHits();
             } catch (\Exception $e) {
                 return [];
             }
