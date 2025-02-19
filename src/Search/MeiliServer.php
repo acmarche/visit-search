@@ -51,7 +51,7 @@ class MeiliServer
      * @throws \Exception
      * @throws TransportExceptionInterface
      */
-    public function addContent(SymfonyStyle $style): void
+    public function addContent(): void
     {
         $documents = $this->getAllData();
         $this->init();
@@ -74,9 +74,9 @@ class MeiliServer
         foreach ($elasticData->getCategories() as $document) {
             $documents[] = $document;
         }
-        foreach ($elasticData->getOffres() as $document) {
+       /* foreach ($elasticData->getOffres() as $document) {
             $documents[] = $document;
-        }
+        }*/
 
         return $documents;
     }
