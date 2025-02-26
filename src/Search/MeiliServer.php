@@ -21,8 +21,7 @@ class MeiliServer
         private string $indexName,
         #[Autowire(env: 'MEILI_PIVOT_MASTER_KEY')]
         private string $masterKey,
-    ) {
-    }
+    ) {}
 
     /**
      *
@@ -74,9 +73,10 @@ class MeiliServer
         foreach ($elasticData->getCategories() as $document) {
             $documents[] = $document;
         }
-       /* foreach ($elasticData->getOffres() as $document) {
+
+        foreach ($elasticData->getOffres() as $document) {
             $documents[] = $document;
-        }*/
+        }
 
         return $documents;
     }
