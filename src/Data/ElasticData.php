@@ -3,6 +3,7 @@
 namespace AcMarche\PivotSearch\Data;
 
 use AcMarche\Pivot\Entities\Offre\Offre;
+use AcMarche\Pivot\Entities\Specification\SpecData;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
@@ -176,11 +177,19 @@ class ElasticData
 
         $content = '';
         $descriptions = $offre->descriptionsByLanguage($language);
+        $offre->description = null;
         if ([] !== $descriptions) {
             $offre->description = $offre->descriptions[0]->value;
             foreach ($descriptions as $description) {
-                if ($description->urn == 'urn:fld:descmarket') {
-                    $content .= ' '.$description->value;
+                if($description instanceof SpecData) {
+                    if ($description->urn == 'urn:fld:descmarket') {
+                        $content .= ' '.$description->value;
+                    }
+                }
+                else {
+                    if ($description['urn'] == 'urn:fld:descmarket') {
+                        $content .= ' '.$description['value'];
+                    }
                 }
             }
         }
