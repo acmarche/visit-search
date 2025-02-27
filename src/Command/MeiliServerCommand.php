@@ -72,6 +72,7 @@ class MeiliServerCommand extends Command
                 $this->meiliServer->addContent();
             } catch (\Exception|TransportExceptionInterface $e) {
                 $this->io->error($e->getMessage());
+                $this->io->error($e->getFile().':'.$e->getLine());
             }
         }
 
