@@ -202,7 +202,6 @@ class ElasticData
             $document->excerpt = $this->slugger->slug($offre->description, ' ')->toString();
         }
         else {
-            dump($descriptions);
             $document->excerpt = '';
         }
         $document->content = $this->slugger->slug($content, ' ')->toString();
