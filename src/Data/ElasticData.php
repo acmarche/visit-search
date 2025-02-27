@@ -101,7 +101,7 @@ class ElasticData
             } else {
                 Mailer::sendError(
                     'update elastic error ',
-                    'create document '.$post->post_title
+                    'create document '.$post->post_title,
                 );
                 //  var_dump($post);
             }
@@ -189,7 +189,13 @@ class ElasticData
         $document = new DocumentElastic();
         $document->id = $this->createId($offre->codeCgt.'-'.$language, 'offer');
         $document->name = Cleaner::cleandata($offre->nameByLanguage($language));
-        $document->excerpt = $this->slugger->slug($offre->description, ' ')->toString();
+        if ($offre->description) {
+            $document->excerpt = $this->slugger->slug($offre->description, ' ')->toString();
+        }
+        else {
+            dump($descriptions);
+            $document->excerpt = '';
+        }
         $document->content = $this->slugger->slug($content, ' ')->toString();
         $document->tags = $categories;
         $document->date = $today->format('Y-m-d');
